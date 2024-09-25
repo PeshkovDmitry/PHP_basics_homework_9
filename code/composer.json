@@ -6,7 +6,6 @@
         }
     },
     "require": {
-        "twig/twig": "^3.0",
-        "symfony/asset": "^7.1"
+        "twig/twig": "^3.0"
     }
 }
