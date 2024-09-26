@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html>
+
+<html random={{ random_int }}>
     <head>
         <title>{{ title }}</title>
-        <link href="src/Views/style.css" rel="stylesheet">
+        <style>{{ style }}</style>
     </head>
-    <body class="body">
-        {% include content_template_name %}
+    <body>
+        {% include 'header.twig' %}
+        <div class="container">
+            <div class="box-left">
+                <p>Пункт 1</p>
+                <p>Пункт 2</p>
+            </div>
+            <div class="box-right"> 
+                 {% include content_template_name %}
+            </div>
+        </div>
+        {% include 'footer.twig' %}
     </body>
 </html>

@@ -23,6 +23,8 @@ class Render {
         $template = $this->environment->load('main.twig');
         
         $templateVariables['content_template_name'] = $contentTemplateName;
+        $templateVariables['random_int'] = rand(1, 10000);
+        $templateVariables['style'] = file_get_contents('src/Views/style.css');
  
         return $template->render($templateVariables);
     }
