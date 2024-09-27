@@ -2,6 +2,8 @@
 
 namespace Geekbrains\Application1;
 
+use Geekbrains\Application1\Controllers\ErrorController;
+
 class Application {
 
     private const APP_NAMESPACE = 'Geekbrains\Application1\Controllers\\';
@@ -40,11 +42,13 @@ class Application {
                 );
             }
             else {
-                return "Метод не существует";
+                $controllerInstance = new ErrorController;
+                return $controllerInstance->methodNotFound($this->methodName);
             }
         }
         else{
-            return "Класс $this->controllerName не существует";
+            $controllerInstance = new ErrorController;
+            return $controllerInstance->classNotFound($this->controllerName);
         }
     }
 
