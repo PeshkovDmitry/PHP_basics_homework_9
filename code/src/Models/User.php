@@ -58,4 +58,15 @@ class User {
             return false;
         }
     }
+
+    public static function saveUserToStorage(string $name, string $birthday) {
+        $address = $_SERVER['DOCUMENT_ROOT'] . User::$storageAddress;
+        if (file_exists($address) && is_readable($address)) {
+            echo $name . ' -> '. $birthday;
+            $file = fopen($address, "a");
+            fwrite($file, PHP_EOL . $name . ', ' . $birthday);
+            fclose($file);
+        }
+        
+    }
 }

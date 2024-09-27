@@ -29,4 +29,18 @@ class UserController {
                 ]);
         }
     }
+
+    public function actionSave() {
+        $routeArray = explode('/', urldecode($_SERVER['REQUEST_URI']));
+        if(isset($routeArray[3]) && $routeArray[3] != '') {
+            $workString = mb_substr($routeArray[3], 1);
+            $workData = explode('&', $workString);
+            if (count($workData) == 2) {
+                $name = str_replace('name=','',$workData[0]);
+                $birthday = str_replace('birthday=','',$workData[1]);  
+                User::saveUserToStorage($name, $birthday);
+            }
+        }
+        return $this->actionIndex();
+    }
 }
