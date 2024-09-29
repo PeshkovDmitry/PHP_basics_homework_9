@@ -1,2 +1,4 @@
 /code/vendor
 /code/cache/*
+.env
+/db
