@@ -1,7 +1,7 @@
 <?php
 
-namespace Geekbrains\Application1\Controllers;
-use Geekbrains\Application1\Render;
+namespace Geekbrains\Homework\Domain\Controllers;
+use Geekbrains\Homework\Application\Render;
 
 class PageController {
 

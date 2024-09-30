@@ -1,8 +1,8 @@
 {
-    "name": "geekbrains/application1",
+    "name": "geekbrains/homework",
     "autoload": {
         "psr-4": {
-            "Geekbrains\\Application1\\": "src/"
+            "Geekbrains\\Homework\\": "src/"
         }
     },
     "require": {

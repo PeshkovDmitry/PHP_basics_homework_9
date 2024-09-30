@@ -1,13 +1,14 @@
 <?php
 
-namespace Geekbrains\Application1;
+namespace Geekbrains\Homework\Application;
 
+use Exception;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 
 class Render {
 
-    private string $viewFolder = '/src/Views/';
+    private string $viewFolder = '/src/Domain/Views/';
     private FilesystemLoader $loader;
     private Environment $environment;
 
@@ -24,8 +25,16 @@ class Render {
         
         $templateVariables['content_template_name'] = $contentTemplateName;
         $templateVariables['random_int'] = rand(1, 10000);
-        $templateVariables['style'] = file_get_contents('src/Views/style.css');
+        $templateVariables['style'] = file_get_contents('src/Domain/Views/style.css');
  
         return $template->render($templateVariables);
+    }
+
+    public static function renderExceptionPage(Exception $exception): string {
+        $render = new Render();
+        
+        return $render->renderPage(
+            'error.twig', 
+            ['error_message' => $exception->getMessage()]);
     }
 }

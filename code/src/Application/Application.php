@@ -1,12 +1,12 @@
 <?php
 
-namespace Geekbrains\Application1;
+namespace Geekbrains\Homework\Application;
 
-use Geekbrains\Application1\Controllers\ErrorController;
+use Exception;
 
 class Application {
 
-    private const APP_NAMESPACE = 'Geekbrains\Application1\Controllers\\';
+    private const APP_NAMESPACE = 'Geekbrains\Homework\Domain\Controllers\\';
 
     private string $controllerName;
     private string $methodName;
@@ -42,17 +42,12 @@ class Application {
                 );
             }
             else {
-                $controllerInstance = new ErrorController;
-                return $controllerInstance->methodNotFound($this->methodName);
+                throw new Exception("Метод $this->methodName не существует");
             }
         }
         else{
-            $controllerInstance = new ErrorController;
-            return $controllerInstance->classNotFound($this->controllerName);
+            throw new Exception("Класс $this->controllerName не существует");
         }
     }
 
-    public function render(array $pageVariables) {
-        
-    }
 }

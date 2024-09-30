@@ -1,13 +1,13 @@
 <?php
 
-namespace Geekbrains\Application1\Models;
+namespace Geekbrains\Homework\Domain\Models;
 
 class User {
 
     private ?string $userName;
     private ?int $userBirthday;
 
-    private static string $storageAddress = '/storage/birthdays.txt';
+    private static string $storageAddress = '/src/Infrastructure/storage/birthdays.txt';
 
     public function __construct(string $name = null, int $birthday = null){
         $this->userName = $name;
