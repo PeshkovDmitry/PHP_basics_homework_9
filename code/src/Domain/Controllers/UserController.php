@@ -30,17 +30,57 @@ class UserController {
         }
     }
 
-    public function actionSave() {
-        $routeArray = explode('/', urldecode($_SERVER['REQUEST_URI']));
-        if(isset($routeArray[3]) && $routeArray[3] != '') {
-            $workString = mb_substr($routeArray[3], 1);
-            $workData = explode('&', $workString);
-            if (count($workData) == 2) {
-                $name = str_replace('name=','',$workData[0]);
-                $birthday = str_replace('birthday=','',$workData[1]);  
-                User::saveUserToStorage($name, $birthday);
-            }
+    public function actionSave(): string {
+        if(User::validateRequestData()) {
+            $user = new User();
+            $user->setParamsFromRequestData();
+            $user->saveToStorage();
+
+            $render = new Render();
+
+            return $render->renderPage(
+                'user-created.twig', 
+                [
+                    'title' => 'Пользователь создан',
+                    'message' => "Создан пользователь " . $user->getUserName() . " " . $user->getUserLastName()
+                ]);
         }
-        return $this->actionIndex();
+        else {
+            throw new \Exception("Переданные данные некорректны");
+        }
+    }
+
+    public function actionUpdate(): string {
+        if(User::exists($_GET['id']) && isset($_GET['name'])) {
+            $user = new User();
+            $user->setUserId($_GET['id']);
+            $user->updateUser($_GET['id'], $_GET['name']);
+        }
+        else {
+            throw new \Exception("Пользователь не существует");
+        }
+
+        $render = new Render();
+        return $render->renderPage(
+            'user-created.twig', 
+            [
+                'title' => 'Пользователь обновлен',
+                'message' => "Обновлен пользователь " . $user->getUserId()
+            ]);
+    }
+
+    public function actionDelete(): string {
+        if(User::exists($_GET['id'])) {
+            User::deleteFromStorage($_GET['id']);
+
+            $render = new Render();
+            
+            return $render->renderPage(
+                'user-removed.twig', []
+            );
+        }
+        else {
+            throw new \Exception("Пользователь не существует");
+        }
     }
 }

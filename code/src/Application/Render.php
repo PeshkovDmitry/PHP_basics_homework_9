@@ -9,7 +9,9 @@ use Twig\Environment;
 class Render {
 
     private string $viewFolder = '/src/Domain/Views/';
+
     private FilesystemLoader $loader;
+    
     private Environment $environment;
 
 

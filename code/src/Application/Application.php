@@ -3,13 +3,25 @@
 namespace Geekbrains\Homework\Application;
 
 use Exception;
+use Geekbrains\Homework\Infrastructure\Config;
+use Geekbrains\Homework\Infrastructure\Storage;
 
 class Application {
 
     private const APP_NAMESPACE = 'Geekbrains\Homework\Domain\Controllers\\';
 
     private string $controllerName;
+    
     private string $methodName;
+    
+    public static Config $config;
+
+    public static Storage $storage;
+
+    public function __construct(){
+        Application::$config = new Config();
+        Application::$storage = new Storage();
+    }
 
     public function run() : string {
         $routeArray = explode('/', $_SERVER['REQUEST_URI']);
