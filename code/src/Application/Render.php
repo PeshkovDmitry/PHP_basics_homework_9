@@ -39,4 +39,12 @@ class Render {
             'error.twig', 
             ['error_message' => $exception->getMessage()]);
     }
+
+    public function renderPageWithForm(string $contentTemplateName = 'page-index.tpl', array $templateVariables = []) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        
+        $templateVariables['csrf_token'] = $_SESSION['csrf_token'];
+ 
+        return $this->renderPage($contentTemplateName, $templateVariables);
+    }
 }

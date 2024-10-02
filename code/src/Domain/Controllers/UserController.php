@@ -83,4 +83,14 @@ class UserController {
             throw new \Exception("Пользователь не существует");
         }
     }
+
+    public function actionEdit(): string {
+        $render = new Render();
+        print_r($_SESSION);
+        return $render->renderPageWithForm(
+                'user-form.tpl', 
+                [
+                    'title' => 'Форма создания пользователя'
+                ]);
+    }
 }

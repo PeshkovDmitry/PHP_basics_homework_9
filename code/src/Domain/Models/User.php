@@ -72,22 +72,23 @@ class User {
     }
 
     public static function validateRequestData(): bool{
-        if(
-            isset($_GET['name']) && !empty($_GET['name']) &&
-            isset($_GET['lastname']) && !empty($_GET['lastname']) &&
-            isset($_GET['birthday']) && !empty($_GET['birthday'])
-        ){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return isset($_POST['name']) && !empty($_POST['name'])
+            && isset($_POST['lastname']) && !empty($_POST['lastname'])
+            && isset($_POST['birthday']) && !empty($_POST['birthday'])
+            && preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday']);
+            // && isset($_SESSION['csrf_token']);
+
+
+        // // if(!isset($_SESSION['csrf_token']) || $_SESSION['csrf_token'] != $_POST['csrf_token']){
+        // //     $result = false;
+        // // }
+
     }
 
     public function setParamsFromRequestData(): void {
-        $this->userName = $_GET['name'];
-        $this->userLastName = $_GET['lastname'];
-        $this->setBirthdayFromString($_GET['birthday']); 
+        $this->userName = htmlspecialchars($_POST['name']);
+        $this->userLastName = htmlspecialchars($_POST['lastname']);
+        $this->setBirthdayFromString($_POST['birthday']); 
     }
 
     public function saveToStorage(){
