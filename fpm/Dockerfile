@@ -6,12 +6,12 @@ RUN apt-get update && apt-get install zip unzip
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-WORKDIR /data
-
-VOLUME /data
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1 
+
+WORKDIR /data
+
+VOLUME /data
 
 CMD ["php-fpm"]

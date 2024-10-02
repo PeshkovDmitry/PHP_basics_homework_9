@@ -86,7 +86,6 @@ class UserController {
 
     public function actionEdit(): string {
         $render = new Render();
-        print_r($_SESSION);
         return $render->renderPageWithForm(
                 'user-form.tpl', 
                 [

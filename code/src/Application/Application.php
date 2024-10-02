@@ -25,7 +25,6 @@ class Application {
 
     public function run() : string {
         session_start();
-        var_dump($_SESSION);
         
         $routeArray = explode('/', $_SERVER['REQUEST_URI']);
 

@@ -75,8 +75,8 @@ class User {
         return isset($_POST['name']) && !empty($_POST['name'])
             && isset($_POST['lastname']) && !empty($_POST['lastname'])
             && isset($_POST['birthday']) && !empty($_POST['birthday'])
-            && preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday']);
-            // && isset($_SESSION['csrf_token']);
+            && preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday'])
+            && isset($_SESSION['csrf_token']);
 
 
         // // if(!isset($_SESSION['csrf_token']) || $_SESSION['csrf_token'] != $_POST['csrf_token']){
