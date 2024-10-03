@@ -54,20 +54,15 @@ class User {
     }
 
     public static function getAllUsersFromStorage(): array {
-
         $sql = "SELECT * FROM users";
-
         $handler = Application::$storage->get()->prepare($sql);
         $handler->execute();
         $result = $handler->fetchAll();
-
         $users = [];
-
         foreach($result as $item){
             $user = new User($item['user_name'], $item['user_lastname'], $item['user_birthday_timestamp']);
             $users[] = $user;
         }
-        
         return $users;
     }
 
@@ -93,7 +88,6 @@ class User {
 
     public function saveToStorage(){
         $sql = "INSERT INTO users(user_name, user_lastname, user_birthday_timestamp) VALUES (:user_name, :user_lastname, :user_birthday)";
-
         $handler = Application::$storage->get()->prepare($sql);
         $handler->execute([
             'user_name' => $this->userName,
