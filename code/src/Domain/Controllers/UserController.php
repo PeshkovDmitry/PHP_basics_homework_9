@@ -2,6 +2,7 @@
 
 namespace Geekbrains\Homework\Domain\Controllers;
 
+use Exception;
 use Geekbrains\Homework\Application\Application;
 use Geekbrains\Homework\Application\Render;
 use Geekbrains\Homework\Domain\Models\User;
@@ -10,10 +11,12 @@ use Geekbrains\Homework\Application\Auth;
 
 class UserController extends AbstractController {
 
+
     protected array $actionsPermissions = [
         'actionHash' => ['admin', 'some'],
         'actionSave' => ['admin']
     ];
+
 
     public function actionIndex() {
         $users = User::getAllUsersFromStorage();
@@ -37,26 +40,7 @@ class UserController extends AbstractController {
     }
 
 
-    public function actionSave(): string {
-        if(User::validateRequestData()) {
-            $user = new User();
-            $user->setParamsFromRequestData();
-            $user->saveToStorage();
-            $render = new Render();
-            return $render->renderPage(
-                'user-created.twig', 
-                [
-                    'title' => 'Пользователь создан',
-                    'message' => "Создан пользователь " . $user->getUserName() . " " . $user->getUserLastName()
-                ]);
-        }
-        else {
-            throw new \Exception("Переданные данные некорректны");
-        }
-    }
-
-
-    public function actionEdit(): string {
+    public function actionCreate(): string {
         $render = new Render();
         return $render->renderPageWithForm(
                 'user-form.twig', 
@@ -64,6 +48,53 @@ class UserController extends AbstractController {
                     'title' => 'Форма создания пользователя'
                 ]);
     }
+
+
+    public function actionSave(): string {
+        if(User::validateRequestData()) {
+            $user = new User();
+            $user->setParamsFromRequestData();
+            $user->saveToStorage();
+            return $this->actionIndex();
+        }
+        else {
+            throw new Exception("Переданные данные некорректны");
+        }
+    }
+
+
+    public function actionUpdate(): string {
+        if(User::exists($_POST['id'])) {
+            $user = new User();
+            $user->setUserId($_GET['id']);
+            $user->updateUser($_GET['id'], $_GET['name']);
+        }
+        else {
+            throw new Exception("Пользователь не существует");
+        }
+
+        $render = new Render();
+        return $render->renderPage(
+            'user-created.twig', 
+            [
+                'title' => 'Пользователь обновлен',
+                'message' => "Обновлен пользователь " . $user->getUserId()
+            ]);
+    }
+
+
+    public function actionDelete(): string {
+        if(User::exists($_POST['id'])) {
+            User::deleteFromStorage($_POST['id']);
+            return $this->actionIndex();
+        }
+        else {
+            throw new Exception("Пользователь не существует");
+        }
+    }
+
+
+
 
 
     public function actionAuth(): string {
@@ -105,39 +136,7 @@ class UserController extends AbstractController {
     }
 
 
-    public function actionUpdate(): string {
-        if(User::exists($_GET['id']) && isset($_GET['name'])) {
-            $user = new User();
-            $user->setUserId($_GET['id']);
-            $user->updateUser($_GET['id'], $_GET['name']);
-        }
-        else {
-            throw new \Exception("Пользователь не существует");
-        }
 
-        $render = new Render();
-        return $render->renderPage(
-            'user-created.twig', 
-            [
-                'title' => 'Пользователь обновлен',
-                'message' => "Обновлен пользователь " . $user->getUserId()
-            ]);
-    }
-
-    public function actionDelete(): string {
-        if(User::exists($_GET['id'])) {
-            User::deleteFromStorage($_GET['id']);
-
-            $render = new Render();
-            
-            return $render->renderPage(
-                'user-removed.twig', []
-            );
-        }
-        else {
-            throw new \Exception("Пользователь не существует");
-        }
-    }
 
 
 }

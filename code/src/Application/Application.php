@@ -37,7 +37,7 @@ class Application {
             $this->getMethodName();
             if(method_exists($this->controllerName, $this->methodName)){
                 $controllerInstance = new $this->controllerName();
-                $this->checkPermissions($controllerInstance, $this->methodName);
+                // $this->checkPermissions($controllerInstance, $this->methodName);
                 return call_user_func_array([$controllerInstance, $this->methodName], []);
             }
             else {

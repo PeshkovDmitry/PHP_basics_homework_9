@@ -16,7 +16,7 @@ p {
 .container {
 	display: grid;
 	gap: 20px;
-	grid-template-columns: 200px auto;
+	grid-template-columns: 250px auto;
 }
 
 .box-left {
@@ -29,4 +29,13 @@ p {
 	background: white;
 	padding: 10px;
 	border-radius: 10px;	
+}
+
+.user-container{
+	display: flex;
+	margin: 10px;
+}
+
+.user-info{
+	width: 500px;
 }
