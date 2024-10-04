@@ -7,7 +7,7 @@
             <form action="/user/update/" method="post">
                 <input type="hidden" name="id" value="{{ user.getUserId() }}">
                 <input type="hidden" name="name" value="{{ user.getUserName() }}">
-                <input type="hidden" name="lastName" value="{{ user.getUserLastName() }}">
+                <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
                 <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
                 <input type="submit" value="Редактировать">
             </form>

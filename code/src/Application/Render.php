@@ -40,6 +40,7 @@ class Render {
     
     public function renderPageWithForm(string $contentTemplateName = 'page-index.twig', array $templateVariables = []) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        return $this->renderPage($contentTemplateName, ['csrf_token' => $_SESSION['csrf_token']]);
+        $templateVariables['csrf_token'] = $_SESSION['csrf_token'];
+        return $this->renderPage($contentTemplateName, $templateVariables);
     }
 }

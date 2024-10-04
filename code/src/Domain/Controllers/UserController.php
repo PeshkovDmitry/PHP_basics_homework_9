@@ -64,10 +64,17 @@ class UserController extends AbstractController {
 
 
     public function actionUpdate(): string {
-        if(User::exists($_POST['id'])) {
-            $user = new User();
-            $user->setUserId($_GET['id']);
-            $user->updateUser($_GET['id'], $_GET['name']);
+        if(User::exists($_POST['id']) && isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['birthday'])) {
+            $render = new Render();
+            return $render->renderPageWithForm(
+                'user-form.twig', 
+                [
+                    'title' => 'Форма создания пользователя',
+                    'id' => $_POST['id'],
+                    'name' => $_POST['name'],
+                    'lastname' => $_POST['lastname'],
+                    'birthday' => $_POST['birthday']
+                ]);
         }
         else {
             throw new Exception("Пользователь не существует");
