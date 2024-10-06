@@ -13,7 +13,7 @@ class UserController extends AbstractController {
 
 
     protected array $actionsPermissions = [
-        'actionHash' => ['admin', 'some'],
+        'actionHash' => ['admin', 'guest'],
         'actionSave' => ['admin']
     ];
 
@@ -21,22 +21,12 @@ class UserController extends AbstractController {
     public function actionIndex() {
         $users = User::getAllUsersFromStorage();
         $render = new Render();
-        if(!$users){
-            return $render->renderPage(
-                'user-empty.twig', 
-                [
-                    'title' => 'Список пользователей в хранилище',
-                    'message' => "Список пуст или не найден"
-                ]);
-        }
-        else{
-            return $render->renderPage(
-                'user-index.twig', 
-                [
-                    'title' => 'Список пользователей в хранилище',
-                    'users' => $users
-                ]);
-        }
+        return $render->renderPage(
+            'user-index.twig', 
+            [
+                'title' => 'Список пользователей в хранилище',
+                'users' => $users
+            ]);
     }
 
 
@@ -46,7 +36,8 @@ class UserController extends AbstractController {
                 'user-form.twig', 
                 [
                     'title' => 'Форма создания пользователя',
-                    'action' => 'save'
+                    'action' => 'save',
+                    'editing' => false
                 ]);
     }
 
@@ -59,10 +50,13 @@ class UserController extends AbstractController {
                 [
                     'title' => 'Форма создания пользователя',
                     'action' => 'update',
+                    'editing' => true,
                     'id' => $_POST['id'],
+                    'login' => $_POST['login'],
                     'name' => $_POST['name'],
                     'lastname' => $_POST['lastname'],
-                    'birthday' => $_POST['birthday']
+                    'birthday' => $_POST['birthday'],
+                    'password' => $_POST['password']
                 ]);
         }
         else {
@@ -107,13 +101,6 @@ class UserController extends AbstractController {
     }
 
 
-
-
-
-
-
-
-
     public function actionAuth(): string {
         $render = new Render();
         return $render->renderPageWithForm(
@@ -123,23 +110,15 @@ class UserController extends AbstractController {
                 ]);
     }
 
-
-    public function actionHash(): string {
-        return Auth::getPasswordHash($_GET['pass_string']);
-    }
-
     public function actionLogin(): string {
-        $result = false;
-        
-        if(isset($_POST['login']) && isset($_POST['password'])){
-            $result = Application::$auth->proceedAuth($_POST['login'], $_POST['password']);
-        }
-        
+        $result = isset($_POST['login']) 
+            && isset($_POST['password'])
+            && Application::$auth->proceedAuth($_POST['login'], $_POST['password']);
         if(!$result){
+            echo "Не залогинились однако";
             $render = new Render();
-
             return $render->renderPageWithForm(
-                'user-auth.tpl', 
+                'user-auth.twig', 
                 [
                     'title' => 'Форма логина',
                     'auth-success' => false,

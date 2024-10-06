@@ -32,13 +32,6 @@ class Application {
 
     public function run() : string {
         session_start();
-
-        // if (preg_match('/^[A-ZА-Я][a-z]+$/u', 'Аaaaa')) {
-        //     echo "Сработало";
-        // } else {
-        //     echo "Не сработало";
-        // }
-
         $this->getControllerName();
         if(class_exists($this->controllerName)){
             $this->getMethodName();
