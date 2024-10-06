@@ -110,16 +110,13 @@ class User {
 
     public static function validateRequestData(): bool{
         return isset($_POST['name']) && !empty($_POST['name'])
+            && preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['name'])
             && isset($_POST['lastname']) && !empty($_POST['lastname'])
+            && preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['lastname'])
             && isset($_POST['birthday']) && !empty($_POST['birthday'])
             && preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday'])
-            && isset($_SESSION['csrf_token']);
-
-
-        // // if(!isset($_SESSION['csrf_token']) || $_SESSION['csrf_token'] != $_POST['csrf_token']){
-        // //     $result = false;
-        // // }
-
+            && isset($_SESSION['csrf_token'])
+            && $_SESSION['csrf_token'] == $_POST['csrf_token'];
     }
 
     public function setParamsFromRequestData(): void {
