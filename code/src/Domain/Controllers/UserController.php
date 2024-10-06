@@ -45,8 +45,40 @@ class UserController extends AbstractController {
         return $render->renderPageWithForm(
                 'user-form.twig', 
                 [
-                    'title' => 'Форма создания пользователя'
+                    'title' => 'Форма создания пользователя',
+                    'action' => 'save'
                 ]);
+    }
+
+
+    public function actionEdit(): string {
+        if(User::exists($_POST['id'])) {
+            $render = new Render();
+            return $render->renderPageWithForm(
+                'user-form.twig', 
+                [
+                    'title' => 'Форма создания пользователя',
+                    'action' => 'update',
+                    'id' => $_POST['id'],
+                    'name' => $_POST['name'],
+                    'lastname' => $_POST['lastname'],
+                    'birthday' => $_POST['birthday']
+                ]);
+        }
+        else {
+            throw new Exception("Пользователь не существует");
+        }
+    }
+
+
+    public function actionDelete(): string {
+        if(User::exists($_POST['id'])) {
+            User::deleteFromStorage($_POST['id']);
+            return $this->actionIndex();
+        }
+        else {
+            throw new Exception("Пользователь не существует");
+        }
     }
 
 
@@ -62,43 +94,21 @@ class UserController extends AbstractController {
         }
     }
 
-
     public function actionUpdate(): string {
-        if(User::exists($_POST['id']) && isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['birthday'])) {
-            $render = new Render();
-            return $render->renderPageWithForm(
-                'user-form.twig', 
-                [
-                    'title' => 'Форма создания пользователя',
-                    'id' => $_POST['id'],
-                    'name' => $_POST['name'],
-                    'lastname' => $_POST['lastname'],
-                    'birthday' => $_POST['birthday']
-                ]);
-        }
-        else {
-            throw new Exception("Пользователь не существует");
-        }
-
-        $render = new Render();
-        return $render->renderPage(
-            'user-created.twig', 
-            [
-                'title' => 'Пользователь обновлен',
-                'message' => "Обновлен пользователь " . $user->getUserId()
-            ]);
-    }
-
-
-    public function actionDelete(): string {
-        if(User::exists($_POST['id'])) {
-            User::deleteFromStorage($_POST['id']);
+        if(User::validateRequestData()) {
+            $user = new User();
+            $user->setParamsFromRequestData();
+            $user->updateInStorage();
             return $this->actionIndex();
         }
         else {
-            throw new Exception("Пользователь не существует");
+            throw new Exception("Переданные данные некорректны");
         }
     }
+
+
+
+
 
 
 

@@ -3,8 +3,8 @@
 <ul>
     {% for user in users %}
         <div class="user-container">
-            <li class="user-info">{{ user.getUserName() }} {{ user.getUserLastName() }}. День рождения: {{ user.getUserBirthday() | date('d.m.Y') }}</li>
-            <form action="/user/update/" method="post">
+            <li class="user-info">{{ user.getUserName() }} {{ user.getUserLastName() }}. День рождения: {{ user.getUserBirthday() | date('d-m-Y') }}</li>
+            <form action="/user/edit/" method="post">
                 <input type="hidden" name="id" value="{{ user.getUserId() }}">
                 <input type="hidden" name="name" value="{{ user.getUserName() }}">
                 <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">

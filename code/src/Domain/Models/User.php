@@ -66,6 +66,48 @@ class User {
         return $users;
     }
 
+    public function saveToStorage(){
+        $sql = "INSERT INTO users(user_name, user_lastname, user_birthday_timestamp) VALUES (:user_name, :user_lastname, :user_birthday)";
+        $handler = Application::$storage->get()->prepare($sql);
+        $handler->execute([
+            'user_name' => $this->userName,
+            'user_lastname' => $this->userLastName,
+            'user_birthday' => $this->userBirthday
+        ]);
+    }
+
+
+    public function updateInStorage(): void{
+        $sql = "UPDATE users SET user_name = :user_name, user_lastname = :user_lastname, user_birthday_timestamp = :user_birthday WHERE id_user = :id";
+        $handler = Application::$storage->get()->prepare($sql);
+        $handler->execute([
+            'id' => $this->idUser, 
+            'user_name' => $this->userName,
+            'user_lastname' => $this->userLastName,
+            'user_birthday' => $this->userBirthday
+        ]);
+    }
+
+
+    public static function deleteFromStorage(int $user_id) : void {
+        $sql = "DELETE FROM users WHERE id_user = :id_user";
+        $handler = Application::$storage->get()->prepare($sql);
+        $handler->execute(['id_user' => $user_id]);
+    }
+
+
+    public static function exists(int $id): bool{
+        $sql = "SELECT count(id_user) as user_count FROM users WHERE id_user = :id_user";
+        $handler = Application::$storage->get()->prepare($sql);
+        $handler->execute([
+            'id_user' => $id
+        ]);
+        $result = $handler->fetchAll();
+        return (count($result) > 0 && $result[0]['user_count'] > 0);
+    }
+
+
+
     public static function validateRequestData(): bool{
         return isset($_POST['name']) && !empty($_POST['name'])
             && isset($_POST['lastname']) && !empty($_POST['lastname'])
@@ -81,52 +123,12 @@ class User {
     }
 
     public function setParamsFromRequestData(): void {
+        if ($_POST['id'] != '') {
+            $this->idUser = (int) htmlspecialchars($_POST['id']);
+        }
         $this->userName = htmlspecialchars($_POST['name']);
         $this->userLastName = htmlspecialchars($_POST['lastname']);
         $this->setBirthdayFromString($_POST['birthday']); 
     }
-
-    public function saveToStorage(){
-        $sql = "INSERT INTO users(user_name, user_lastname, user_birthday_timestamp) VALUES (:user_name, :user_lastname, :user_birthday)";
-        $handler = Application::$storage->get()->prepare($sql);
-        $handler->execute([
-            'user_name' => $this->userName,
-            'user_lastname' => $this->userLastName,
-            'user_birthday' => $this->userBirthday
-        ]);
-    }
-
-    public static function exists(int $id): bool{
-        $sql = "SELECT count(id_user) as user_count FROM users WHERE id_user = :id_user";
-
-        $handler = Application::$storage->get()->prepare($sql);
-        $handler->execute([
-            'id_user' => $id
-        ]);
-
-        $result = $handler->fetchAll();
-
-        if(count($result) > 0 && $result[0]['user_count'] > 0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    public function updateUser(int $id, string $name): void{
-        $sql = "UPDATE users SET user_name = :name WHERE id_user = :id";
-
-        $handler = Application::$storage->get()->prepare($sql);
-        $handler->execute(['id' => $id, 'name' => $name]);
-    }
-
-    public static function deleteFromStorage(int $user_id) : void {
-        $sql = "DELETE FROM users WHERE id_user = :id_user";
-
-        $handler = Application::$storage->get()->prepare($sql);
-        $handler->execute(['id_user' => $user_id]);
-    }
-
 
 }
