@@ -183,7 +183,7 @@ class User {
         $this->userName = htmlspecialchars($_POST['name']);
         $this->userLastName = htmlspecialchars($_POST['lastname']);
         $this->setBirthdayFromString($_POST['birthday']); 
-        $this->userPasswordHash = Auth::getPasswordHash($_POST['lastname']);
+        $this->userPasswordHash = Auth::getPasswordHash($_POST['password']);
         $this->userRole = "guest";
     }
 

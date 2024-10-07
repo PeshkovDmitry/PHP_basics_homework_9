@@ -7,26 +7,33 @@ use Geekbrains\Homework\Application\Application;
 use Geekbrains\Homework\Application\Render;
 use Geekbrains\Homework\Domain\Models\User;
 use Geekbrains\Homework\Application\Auth;
+use Geekbrains\Homework\Domain\Controllers\PageController;
 
 
 class UserController extends AbstractController {
 
 
     protected array $actionsPermissions = [
-        'actionHash' => ['admin', 'guest'],
-        'actionSave' => ['admin']
+        'actionIndex' => ['admin', 'guest'],
+        'actionCreate' => ['admin'],
+        'actionEdit' => ['admin'],
+        'actionDelete' => ['admin'],
+        'actionSave' => ['admin'],
+        'actionUpdate' => ['admin']
     ];
 
+    protected array $alwaysEnabledMethods = ['actionAuth', 'actionLogin', 'actionLogout'];
 
     public function actionIndex() {
         $users = User::getAllUsersFromStorage();
         $render = new Render();
         return $render->renderPage(
             'user-index.twig', 
-            [
-                'title' => 'Список пользователей в хранилище',
-                'users' => $users
-            ]);
+            Auth::addSessionData(
+                [
+                    'title' => 'Список пользователей в хранилище',
+                    'users' => $users,
+                ]));
     }
 
 
@@ -34,11 +41,12 @@ class UserController extends AbstractController {
         $render = new Render();
         return $render->renderPageWithForm(
                 'user-form.twig', 
-                [
-                    'title' => 'Форма создания пользователя',
-                    'action' => 'save',
-                    'editing' => false
-                ]);
+                Auth::addSessionData(
+                    [
+                        'title' => 'Форма создания пользователя',
+                        'action' => 'save',
+                        'editing' => false
+                    ]));
     }
 
 
@@ -46,18 +54,19 @@ class UserController extends AbstractController {
         if(User::exists($_POST['id'])) {
             $render = new Render();
             return $render->renderPageWithForm(
-                'user-form.twig', 
-                [
-                    'title' => 'Форма создания пользователя',
-                    'action' => 'update',
-                    'editing' => true,
-                    'id' => $_POST['id'],
-                    'login' => $_POST['login'],
-                    'name' => $_POST['name'],
-                    'lastname' => $_POST['lastname'],
-                    'birthday' => $_POST['birthday'],
-                    'password' => $_POST['password']
-                ]);
+                'user-form.twig',
+                Auth::addSessionData( 
+                    [
+                        'title' => 'Форма создания пользователя',
+                        'action' => 'update',
+                        'editing' => true,
+                        'id' => $_POST['id'],
+                        'login' => $_POST['login'],
+                        'name' => $_POST['name'],
+                        'lastname' => $_POST['lastname'],
+                        'birthday' => $_POST['birthday'],
+                        'password' => $_POST['password']
+                    ]));
         }
         else {
             throw new Exception("Пользователь не существует");
@@ -105,9 +114,10 @@ class UserController extends AbstractController {
         $render = new Render();
         return $render->renderPageWithForm(
                 'user-auth.twig', 
-                [
-                    'title' => 'Форма логина'
-                ]);
+                Auth::addSessionData(
+                    [
+                        'title' => 'Форма логина'
+                    ]));
     }
 
     public function actionLogin(): string {
@@ -115,24 +125,29 @@ class UserController extends AbstractController {
             && isset($_POST['password'])
             && Application::$auth->proceedAuth($_POST['login'], $_POST['password']);
         if(!$result){
-            echo "Не залогинились однако";
             $render = new Render();
             return $render->renderPageWithForm(
                 'user-auth.twig', 
                 [
                     'title' => 'Форма логина',
-                    'auth-success' => false,
+                    'auth-fail' => true,
                     'auth-error' => 'Неверные логин или пароль'
                 ]);
         }
         else{
-            header('Location: /');
-            return "";
+            $controller = new PageController;
+            return $controller->actionIndex();
         }
     }
 
 
+    public function actionLogout(): string {
+        session_unset();
+        $controller = new PageController;
+        return $controller->actionIndex();
+    }
 
+    
 
 
 }

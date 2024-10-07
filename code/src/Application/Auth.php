@@ -22,5 +22,12 @@ class Auth {
         return $success;
     }
 
+    public static function addSessionData(array $templateVariables) : array {
+        if (isset($_SESSION['user_name'])) {
+            $templateVariables['islogin'] = true;
+            $templateVariables['username'] = $_SESSION['user_name'] . ' ' . $_SESSION['user_lastname'];
+        }
+        return $templateVariables;
+    }
     
 }

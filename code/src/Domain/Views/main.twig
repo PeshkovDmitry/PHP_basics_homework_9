@@ -11,8 +11,11 @@
             <div class="box-left">
                 {% include 'sidebar.twig' %}
             </div>
-            <div class="box-right"> 
-                 {% include content_template_name %}
+            <div class="box-right">
+                {% if islogin %}
+                    <p>Добро пожаловать, {{ username }}</p>
+                {% endif %}
+                {% include content_template_name %}
             </div>
         </div>
         {% include 'footer.twig' %}

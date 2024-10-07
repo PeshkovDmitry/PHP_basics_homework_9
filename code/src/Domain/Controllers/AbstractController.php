@@ -7,6 +7,8 @@ use Geekbrains\Homework\Application\Application;
 class AbstractController {
 
     protected array $actionsPermissions = [];
+
+    protected array $alwaysEnabledMethods = [];
     
 
     public function getUserRoles(): array{
@@ -15,7 +17,9 @@ class AbstractController {
             $result = $this->getRolesFromDB();
             if(!empty($result)){
                 foreach($result as $role){
-                    $roles[] = $role['role'];
+                    if (isset($role['user_role'])) {
+                        $roles[] = $role['user_role'];
+                    }
                 }
             }
         }      
@@ -23,14 +27,20 @@ class AbstractController {
     }
 
     private function getRolesFromDB() : array {
-        $rolesSql = "SELECT * FROM user_roles WHERE id_user = :id";
+        $rolesSql = "SELECT user_role FROM users WHERE id_user = :id";
         $handler = Application::$storage->get()->prepare($rolesSql);
         $handler->execute(['id' => $_SESSION['id_user']]);
         return $handler->fetchAll();
     }
 
 
-    public function getActionsPermissions(string $methodName): array {
+    public function getActionsPermissions(string $methodName) : array {
         return isset($this->actionsPermissions[$methodName]) ? $this->actionsPermissions[$methodName] : [];
     }
+
+
+    public function isAlwaysEnabled(string $methodName) : bool {
+        return in_array($methodName, $this->alwaysEnabledMethods);
+    }
+
 }

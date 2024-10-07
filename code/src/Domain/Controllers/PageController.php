@@ -2,11 +2,13 @@
 
 namespace Geekbrains\Homework\Domain\Controllers;
 use Geekbrains\Homework\Application\Render;
+use Geekbrains\Homework\Application\Auth;
 
 class PageController {
 
     public function actionIndex() {
         $render = new Render();
-        return $render->renderPage('page-index.twig', ['title' => 'Главная страница']);
+        return $render->renderPage('page-index.twig', Auth::addSessionData(['title' => 'Главная страница'])); 
+            
     }
 }
