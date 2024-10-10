@@ -160,18 +160,37 @@ class User {
 
 
 
-    public static function validateRequestData(): bool{
-        return isset($_POST['login']) && !empty($_POST['login'])
-            && preg_match('/^[A-ZА-Яa-zа-я]+$/u', $_POST['login'])
-            && isset($_POST['name']) && !empty($_POST['name'])
-            && preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['name'])
-            && isset($_POST['lastname']) && !empty($_POST['lastname'])
-            && preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['lastname'])
-            && isset($_POST['birthday']) && !empty($_POST['birthday'])
-            && preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday'])
-            && isset($_POST['password']) && !empty($_POST['password'])
-            && isset($_SESSION['csrf_token'])
-            && $_SESSION['csrf_token'] == $_POST['csrf_token'];
+    public static function validateRequestData() : void {
+        if (isset($_POST['login']) && empty($_POST['login'])) {
+            throw new \Exception("Логин пользователя не должен быть пустым");
+        }
+        if (!preg_match('/^[A-ZА-Яa-zа-я]+$/u', $_POST['login'])) {
+            throw new \Exception("Логин пользователя должен состоять только из строчных и прописных букв");
+        }
+        if (isset($_POST['name']) && empty($_POST['name'])) {
+            throw new \Exception("Имя пользователя не должно быть пустым");
+        }
+        if (!preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['name'])) {
+            throw new \Exception("Имя пользователя должно состоять только из букв. Первая буква должна быть строчной");
+        }
+        if (isset($_POST['lastname']) && empty($_POST['lastname'])) {
+            throw new \Exception("Фамилия пользователя не должна быть пустой");
+        }
+        if (!preg_match('/^[A-ZА-Я][a-zа-я]+$/u', $_POST['lastname'])) {
+            throw new \Exception("Фамилия пользователя должна состоять только из букв. Первая буква должна быть строчной");
+        }
+        if (isset($_POST['birthday']) && empty($_POST['birthday'])) {
+            throw new \Exception("Не указан день рождения пользователя");
+        }
+        if (!preg_match('/^(\d{2}-\d{2}-\d{4})$/', $_POST['birthday'])) {
+            throw new \Exception("День рождения пользователя должен быть передан в формате DD-MM-YYYY");
+        }
+        if (isset($_POST['password']) && empty($_POST['password'])) {
+            throw new \Exception("Не указан пароль пользователя");
+        }
+        if (!isset($_SESSION['csrf_token']) || $_SESSION['csrf_token'] != $_POST['csrf_token']) {
+            throw new \Exception("Сдается мне, что вы не совсем тот, за кого пытаетесь себя выдать...");
+        }
     }
     
 

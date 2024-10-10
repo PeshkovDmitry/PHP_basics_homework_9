@@ -86,27 +86,19 @@ class UserController extends AbstractController {
 
 
     public function actionSave(): string {
-        if(User::validateRequestData()) {
-            $user = new User();
-            $user->setParamsFromRequestData();
-            $user->saveToStorage();
-            return $this->actionIndex();
-        }
-        else {
-            throw new Exception("Переданные данные некорректны");
-        }
+        User::validateRequestData();
+        $user = new User();
+        $user->setParamsFromRequestData();
+        $user->saveToStorage();
+        return $this->actionIndex();
     }
 
     public function actionUpdate(): string {
-        if(User::validateRequestData()) {
-            $user = new User();
-            $user->setParamsFromRequestData();
-            $user->updateInStorage();
-            return $this->actionIndex();
-        }
-        else {
-            throw new Exception("Переданные данные некорректны");
-        }
+        User::validateRequestData();
+        $user = new User();
+        $user->setParamsFromRequestData();
+        $user->updateInStorage();
+        return $this->actionIndex();
     }
 
 
