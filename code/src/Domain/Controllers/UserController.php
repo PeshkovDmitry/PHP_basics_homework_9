@@ -93,7 +93,9 @@ class UserController extends AbstractController {
     public function actionDelete(): string {
         if(User::exists($_POST['id'])) {
             User::deleteFromStorage($_POST['id']);
-            return $this->actionIndex();
+            // return $this->actionIndex();
+            $pageController = new PageController();
+            return $pageController->actionIndex();
         }
         else {
             throw new Exception("Пользователь не существует");
@@ -106,7 +108,9 @@ class UserController extends AbstractController {
         $user = new User();
         $user->setParamsFromRequestData();
         $user->saveToStorage();
-        return $this->actionIndex();
+        // return $this->actionIndex();
+        $pageController = new PageController();
+        return $pageController->actionIndex();
     }
 
     public function actionUpdate(): string {
@@ -114,7 +118,9 @@ class UserController extends AbstractController {
         $user = new User();
         $user->setParamsFromRequestData();
         $user->updateInStorage();
-        return $this->actionIndex();
+        // return $this->actionIndex();
+        $pageController = new PageController();
+        return $pageController->actionIndex();
     }
 
 
