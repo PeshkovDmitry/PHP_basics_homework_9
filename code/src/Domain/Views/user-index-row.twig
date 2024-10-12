@@ -4,20 +4,21 @@
             <div class="col-2 themed-grid-col">{{ user.getUserLastName() }}</div>    
             <div class="col-2 themed-grid-col">{{ user.getUserBirthday() | date('d-m-Y') }}</div>
             <div class="col-2 themed-grid-col">
-                <form action="/user/edit/" method="post" target="_blank">
-                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
-                    <input type="hidden" name="login" value="{{ user.getUserLogin() }}">
-                    <input type="hidden" name="name" value="{{ user.getUserName() }}">
-                    <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
-                    <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
-                    <input type="hidden" name="password" value="{{ user.getUserPasswordHash() }}">
-                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Редактировать">
-                </form>            
+                {% if isAdmin %}
+                    <form action="/user/edit/" method="post" target="_blank">
+                        <input type="hidden" name="id" value="{{ user.getUserId() }}">
+                        <input type="hidden" name="login" value="{{ user.getUserLogin() }}">
+                        <input type="hidden" name="name" value="{{ user.getUserName() }}">
+                        <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
+                        <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
+                        <input type="hidden" name="password" value="{{ user.getUserPasswordHash() }}">
+                        <input type="submit" class="btn btn-secondary w-100 py-2" value="Редактировать">
+                    </form>
+                {% endif %}
             </div>    
             <div class="col-2 themed-grid-col" >
-                <form action="/user/delete/" method="post" target="_blank">
-                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
-                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Удалить">
-                </form>            
+                {% if isAdmin %}
+                    <button type="button" class="btn btn-secondary w-100 py-2" onClick="deleteUser({{ user.getUserId() }})">Удалить</button>
+                {% endif %}
             </div>    
         </div> 

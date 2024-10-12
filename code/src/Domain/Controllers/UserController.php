@@ -27,6 +27,12 @@ class UserController extends AbstractController {
 
     public function actionIndex() {
         $users = User::getAllUsersFromStorage();
+        $isAdmin = false;
+        foreach($users as $user){
+            if ($user->getUserId() == $_SESSION['id_user'] && $user->getUserRole() == "admin") {
+                $isAdmin = true;                
+            }
+        }
         $render = new Render();
         return $render->renderPage(
             'user-index.twig', 
@@ -34,6 +40,7 @@ class UserController extends AbstractController {
                 [
                     'title' => 'Список пользователей в хранилище',
                     'users' => $users,
+                    'isAdmin' => $isAdmin
                 ]));
     }
 

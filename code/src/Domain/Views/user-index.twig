@@ -12,10 +12,33 @@
         {% include 'user-index-row.twig' %}
     {% endfor %}
 </div>
-{% include 'user-index-footer.twig' %}
+{% if isAdmin %}
+    {% include 'user-index-footer.twig' %}
+{% endif %}
+
 
 
 <script>
+
+    function deleteUser(userId) {
+        $.ajax({
+            method: 'POST',
+            url: "/user/delete/",
+            data: { id: userId}
+        }).done(function (response) {
+            document.getElementById("userId" + userId).remove();
+        });
+    }
+
+    function getUserIdArray() {
+        let ids = document.getElementsByClassName('table-column-user-id');
+        let result = [];
+        for (let i = 0; i < ids.length; i++) {
+            result.push(Number(ids[i].textContent));
+        }
+        return result;
+    }
+    
 
     var template = `        
         <div id="userIdUSER_ID" class="row mb-3 text-center">
@@ -35,23 +58,19 @@
                 </form>            
             </div>    
             <div class="col-2 themed-grid-col">
-                <form action="/user/delete/" method="post" target="_blank">
-                    <input type="hidden" name="id" value="USER_ID">
-                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Удалить">
-                </form>            
+                <button type="button" class="btn btn-secondary w-100 py-2" onClick="deleteUser(USER_ID)">Удалить</button>            
             </div>    
         </div> 
     `;
 
  
     setInterval(function () {
-      
-        var ids = document.getElementsByClassName('table-column-user-id');
-        var maxId = -1;
-        for (let i = 0; i < ids.length; i++) {
-            maxId = Math.max(maxId, ids[i].textContent);
-        }
-      
+        
+        let maxId = -1;
+        array.forEach(element => {
+            maxId = Math.max(maxId, element)
+        });
+
         $.ajax({
             method: 'GET',
             url: "/user/indexRefresh/",
