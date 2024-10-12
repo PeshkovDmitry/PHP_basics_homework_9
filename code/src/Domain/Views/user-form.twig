@@ -1,33 +1,48 @@
-<form action="/user/{{ action }}/" method="post">
-  <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  <input id="user-id" type="hidden" name="id" value="{{ id }}">
-  {% if not editing %}
-    <p>
-      <label for="user-login">Логин:</label>
-      <input id="user-login" type="text" name="login" value="{{ login }}">
-    </p>
-  {% else %}
-    <input id="user-login" type="hidden" name="login" value="{{ login }}">
-  {% endif %}
-  <p>
-    <label for="user-name">Имя:</label>
-    <input id="user-name" type="text" name="name" value="{{ name }}">
-  </p>
-  <p>
-    <label for="user-lastname">Фамилия:</label>
-    <input id="user-lastname" type="text" name="lastname" value="{{ lastname }}">
-  </p>
-  <p>
-    <label for="user-birthday">День рождения:</label>
-    <input id="user-birthday" type="text" name="birthday" placeholder="ДД-ММ-ГГГГ" value="{{ birthday | date('d-m-Y')}}">
-  </p>
-  {% if not editing %}
-    <p>
-      <label for="user-password">Пароль:</label>
-      <input id="user-password" type="password" name="password">
-    </p>
-  {% else %}
-      <input id="user-password" type="hidden" name="password" value="{{ password }}">
-  {% endif %}
-  <p><input type="submit" value="Сохранить"></p>
-</form>
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+          {% if editing %}
+            <h1 class="h3 mb-3 fw-normal">Изменение данных пользователя</h1>
+          {% else %}
+            <h1 class="h3 mb-3 fw-normal">Создание нового пользователя</h1>
+          {% endif %}        
+      </div>
+      <div class="modal-body py-0">
+        <form action="/user/{{ action }}/" method="post">
+          <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input id="user-id" type="hidden" name="id" value="{{ id }}">
+          {% if not editing %}
+            <p>
+              <label for="user-login">Логин:</label>
+              <input id="user-login" class="form-control" type="text" name="login" value="{{ login }}">
+            </p>
+          {% else %}
+            <input id="user-login" type="hidden" name="login" value="{{ login }}">
+          {% endif %}
+          <p>
+            <label for="user-name">Имя:</label>
+            <input id="user-name" class="form-control" type="text" name="name" value="{{ name }}">
+          </p>
+          <p>
+            <label for="user-lastname">Фамилия:</label>
+            <input id="user-lastname" class="form-control" type="text" name="lastname" value="{{ lastname }}">
+          </p>
+          <p>
+            <label for="user-birthday">День рождения:</label>
+            <input id="user-birthday" class="form-control" type="text" name="birthday" placeholder="ДД-ММ-ГГГГ" value="{{ birthday | date('d-m-Y')}}">
+          </p>
+          {% if not editing %}
+            <p>
+              <label for="user-password">Пароль:</label>
+              <input id="user-password" class="form-control" type="password" name="password">
+            </p>
+          {% else %}
+              <input id="user-password" type="hidden" name="password" value="{{ password }}">
+          {% endif %}
+          <p><input type="submit" class="btn btn-primary w-100 py-2" value="Сохранить"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

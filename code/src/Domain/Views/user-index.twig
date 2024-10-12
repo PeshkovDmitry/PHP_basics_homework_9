@@ -1,25 +1,59 @@
-<p>Список пользователей в хранилище</p>
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <p class="lead text-body-secondary">Список пользователей в хранилище</p>
+      </div>
+    </div>
+  </section>
 
-<ul>
+<div class="container">
+
+    <div class="row mb-3 text-center">
+      <div class="col-2 themed-grid-col"><span class="fs-4">#</span></div>
+      <div class="col-2 themed-grid-col"><span class="fs-4">Имя</span></div>
+      <div class="col-2 themed-grid-col"><span class="fs-4">Фамилия</span></div>
+      <div class="col-2 themed-grid-col"><span class="fs-4">Дата рождения</span></div>
+      <div class="col-2 themed-grid-col"></div>
+      <div class="col-2 themed-grid-col"></div>
+    </div>
+
     {% for user in users %}
-        <div class="user-container">
-            <li class="user-info">{{ user.getUserName() }} {{ user.getUserLastName() }}. День рождения: {{ user.getUserBirthday() | date('d-m-Y') }}</li>
-            <form action="/user/edit/" method="post">
-                <input type="hidden" name="id" value="{{ user.getUserId() }}">
-                <input type="hidden" name="login" value="{{ user.getUserLogin() }}">
-                <input type="hidden" name="name" value="{{ user.getUserName() }}">
-                <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
-                <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
-                <input type="hidden" name="password" value="{{ user.getUserPasswordHash() }}">
-                <input type="submit" value="Редактировать">
-            </form>
-            <form action="/user/delete/" method="post">
-                <input type="hidden" name="id" value="{{ user.getUserId() }}">
-                <input type="submit" value="Удалить">
-            </form>
+        <div class="row mb-3 text-center">
+            <div class="col-2 themed-grid-col">#</div>
+            <div class="col-2 themed-grid-col">{{ user.getUserName() }}</div>
+            <div class="col-2 themed-grid-col">{{ user.getUserLastName() }}</div>    
+            <div class="col-2 themed-grid-col">{{ user.getUserBirthday() | date('d-m-Y') }}</div>
+            <div class="col-2 themed-grid-col">
+                <form action="/user/edit/" method="post">
+                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
+                    <input type="hidden" name="login" value="{{ user.getUserLogin() }}">
+                    <input type="hidden" name="name" value="{{ user.getUserName() }}">
+                    <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
+                    <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
+                    <input type="hidden" name="password" value="{{ user.getUserPasswordHash() }}">
+                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Редактировать">
+                </form>            
+            </div>    
+            <div class="col-2 themed-grid-col">
+                <form action="/user/delete/" method="post">
+                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
+                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Удалить">
+                </form>            
+            </div>    
         </div>    
     {% endfor %}
-    <form action="/user/create/" method="post">
-        <input type="submit" value="Сoздать пользователя">
-    </form>
-</ul>
+
+    <div class="row mb-3 text-center">
+      <div class="col-2 themed-grid-col"></div>
+      <div class="col-2 themed-grid-col"></div>
+      <div class="col-2 themed-grid-col"></div>
+      <div class="col-2 themed-grid-col"></div>
+      <div class="col-2 themed-grid-col">
+        <form action="/user/create/" method="post">
+            <input type="submit" class="btn btn-primary w-100 py-2" value="Сoздать пользователя">
+        </form>
+      </div>
+      <div class="col-2 themed-grid-col"></div>
+    </div>
+
+  </div>

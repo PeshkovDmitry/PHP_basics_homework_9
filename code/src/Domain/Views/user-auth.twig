@@ -1,23 +1,34 @@
-{% if auth-fail %}
-  {{ auth-error }}
-{% endif %}
-
-{% if islogin %}
-  <form action="/user/logout/" method="post">
-    <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <p><input type="submit" value="Выйти из системы"></p>
-  </form>  
-{% else %}
-  <form action="/user/login/" method="post">
-    <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <p>
-      <label for="user-login">Логин:</label>
-      <input id="user-login" type="text" name="login">
-    </p>
-    <p>
-      <label for="user-password">Пароль:</label>
-      <input id="user-password" type="password" name="password">
-    </p>
-    <p><input type="submit" value="Войти"></p>
-  </form>
-{% endif %}
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        {% if auth-fail %}
+          <h1 class="h3 mb-3 fw-normal">{{ auth-error }}</h1>
+        {% else %}
+          <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
+        {% endif %}
+      </div>
+      <div class="modal-body py-0">
+        {% if islogin %}
+          <form action="/user/logout/" method="post">
+            <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <p><input type="submit" class="btn btn-primary w-100 py-2" value="Выйти из системы"></p>
+          </form>  
+        {% else %}
+          <form action="/user/login/" method="post">
+            <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <p>
+              <label for="user-login">Логин:</label>
+              <input id="user-login" class="form-control" type="text" name="login">
+            </p>
+            <p>
+              <label for="user-password">Пароль:</label>
+              <input id="user-password" class="form-control" type="password" name="password">
+            </p>
+            <p><input type="submit" class="btn btn-primary w-100 py-2" value="Войти"></p>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
