@@ -1,6 +1,6 @@
 <?php
 
-require_once './vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use Geekbrains\Homework\Application\Application;
 use Geekbrains\Homework\Application\Render;

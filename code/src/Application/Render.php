@@ -16,9 +16,9 @@ class Render {
 
 
     public function __construct(){
-        $this->loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . $this->viewFolder);
+        $this->loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . "/../" . $this->viewFolder);
         $this->environment = new Environment($this->loader, [
-            // 'cache' => $_SERVER['DOCUMENT_ROOT'].'/cache/',
+            // 'cache' => $_SERVER['DOCUMENT_ROOT']. "/../" .'/cache/',
         ]);
     }
 
@@ -27,7 +27,7 @@ class Render {
         $template = $this->environment->load('main.twig');
         $templateVariables['content_template_name'] = $contentTemplateName;
         $templateVariables['random_int'] = rand(1, 10000);
-        $templateVariables['style'] = file_get_contents('src/Domain/Views/style.css');
+        $templateVariables['style'] = file_get_contents('css/style.css');
         return $template->render($templateVariables);
     }
 
