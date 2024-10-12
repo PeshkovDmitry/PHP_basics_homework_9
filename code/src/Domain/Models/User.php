@@ -95,10 +95,18 @@ class User {
     }
 
 
-    public static function getAllUsersFromStorage(): array {
+    public static function getAllUsersFromStorage(?int $startUserId = null): array {
+        $hasStartUserId = ($startUserId != null && $startUserId > 0);
         $sql = "SELECT * FROM users";
+        if ($hasStartUserId) {
+            $sql .= " WHERE id_user > :id_user";
+        }
         $handler = Application::$storage->get()->prepare($sql);
-        $handler->execute();
+        if ($hasStartUserId) {
+            $handler->execute(['id_user' => $startUserId]);
+        } else {
+            $handler->execute();
+        }
         $result = $handler->fetchAll();
         $users = [];
         foreach($result as $item){
@@ -204,6 +212,19 @@ class User {
         $this->setBirthdayFromString($_POST['birthday']); 
         $this->userPasswordHash = Auth::getPasswordHash($_POST['password']);
         $this->userRole = "guest";
+    }
+
+    public function getUserDataAsArray(): array {
+        $userArray = [
+            'id' => $this->idUser,
+            'userlogin' => $this->userLogin,
+            'username' => $this->userName, 
+            'userlastname' => $this->userLastName,
+            'userbirthday' => date('d-m-Y', $this->userBirthday),
+            'userpassword' => $this->userPasswordHash
+        ];
+
+        return $userArray;
     }
 
 }

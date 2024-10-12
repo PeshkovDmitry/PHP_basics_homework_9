@@ -1,0 +1,23 @@
+        <div id="userId{{ user.getUserId() }}" class="row mb-3 text-center">
+            <div class="col-2 themed-grid-col table-column-user-id">{{ user.getUserId() }}</div>
+            <div class="col-2 themed-grid-col">{{ user.getUserName() }}</div>
+            <div class="col-2 themed-grid-col">{{ user.getUserLastName() }}</div>    
+            <div class="col-2 themed-grid-col">{{ user.getUserBirthday() | date('d-m-Y') }}</div>
+            <div class="col-2 themed-grid-col">
+                <form action="/user/edit/" method="post" target="_blank">
+                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
+                    <input type="hidden" name="login" value="{{ user.getUserLogin() }}">
+                    <input type="hidden" name="name" value="{{ user.getUserName() }}">
+                    <input type="hidden" name="lastname" value="{{ user.getUserLastName() }}">
+                    <input type="hidden" name="birthday" value="{{ user.getUserBirthday() }}">
+                    <input type="hidden" name="password" value="{{ user.getUserPasswordHash() }}">
+                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Редактировать">
+                </form>            
+            </div>    
+            <div class="col-2 themed-grid-col">
+                <form action="/user/delete/" method="post">
+                    <input type="hidden" name="id" value="{{ user.getUserId() }}">
+                    <input type="submit" class="btn btn-secondary w-100 py-2" value="Удалить">
+                </form>            
+            </div>    
+        </div> 

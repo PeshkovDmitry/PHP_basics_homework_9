@@ -15,6 +15,7 @@ class UserController extends AbstractController {
 
     protected array $actionsPermissions = [
         'actionIndex' => ['admin', 'guest'],
+        'actionIndexRefresh' => ['admin', 'guest'],
         'actionCreate' => ['admin'],
         'actionEdit' => ['admin'],
         'actionDelete' => ['admin'],
@@ -34,6 +35,21 @@ class UserController extends AbstractController {
                     'title' => 'Список пользователей в хранилище',
                     'users' => $users,
                 ]));
+    }
+
+    public function actionIndexRefresh(){
+        $limit = null;
+        if(isset($_GET['maxId']) && ($_GET['maxId'] > 0)){
+            $limit = (int) $_GET['maxId'];
+        }
+        $users = User::getAllUsersFromStorage($limit);
+        $usersData = [];
+        if(count($users) > 0) {
+            foreach($users as $user){
+                $usersData[] = $user->getUserDataAsArray();
+            }
+        }
+        return json_encode($usersData);
     }
 
 
